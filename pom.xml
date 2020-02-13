@@ -17,6 +17,7 @@
         <module>gmall0218-common</module>
         <module>gmall0218-mocker</module>
         <module>gmall0218-logger</module>
+        <module>gmall0218-realTime</module>
     </modules>
 
     <properties>
