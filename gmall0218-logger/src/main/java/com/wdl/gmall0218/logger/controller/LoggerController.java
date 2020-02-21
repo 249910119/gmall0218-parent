@@ -22,15 +22,16 @@ public class LoggerController {
         //1. 加时间戳
         JSONObject jsonObject = JSON.parseObject(logString);
         jsonObject.put("ts", System.currentTimeMillis());
+        String jsonString = jsonObject.toJSONString();
 
         //2. 落盘
-        log.info(logString);
+        log.info(jsonString);
 
         //发送到kafka
         if ("startup".equals(jsonObject.getString("type"))) {
-            kafkaTemplate.send(GmallConstant.KAFKA_TOPIC_STARTUP, logString);
+            kafkaTemplate.send(GmallConstant.KAFKA_TOPIC_STARTUP, jsonString);
         } else {
-            kafkaTemplate.send(GmallConstant.KAFKA_TOPIC_EVENT, logString);
+            kafkaTemplate.send(GmallConstant.KAFKA_TOPIC_EVENT, jsonString);
         }
 
         return "success";

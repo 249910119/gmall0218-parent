@@ -26,9 +26,12 @@ object DauApp {
 
     val kafkaDS: InputDStream[ConsumerRecord[String, String]] = MyKafkaUtil.getKafkaStream(GmallConstant.KAFKA_TOPIC_STARTUP, ssc)
 
+    println("begin ......" + kafkaDS.count())
+
     // TODO 拆分时间戳, 放到 logDate, logHour 中
     val startUpLogDS: DStream[StartUpLog] = kafkaDS.map(_.value()).map(log => {
       val startUpLog: StartUpLog = JSON.parseObject(log, classOf[StartUpLog])
+      println(startUpLog.mid + ":" + startUpLog.appid)
       val date = new Date(startUpLog.ts)
       val dateFormat: String = new SimpleDateFormat("yyyy-MM-dd HH").format(date)
       val dateArr: Array[String] = dateFormat.split(" ")
@@ -63,6 +66,7 @@ object DauApp {
         val jedisWrite: Jedis = RedisUtil.getJedisClient
         rdd.foreach(sul => {
           jedisWrite.sadd("dau:" + sul.logDate, sul.mid)
+          print("往redis注入：" + sul.logDate + sul.mid)
         })
         jedisWrite.close()
       })
