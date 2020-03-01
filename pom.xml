@@ -21,6 +21,7 @@
         <module>gmall0218-publisher</module>
         <module>dw-chart</module>
         <module>gmall0218-canal</module>
+        <module>gmall0218-flink</module>
     </modules>
 
     <properties>
